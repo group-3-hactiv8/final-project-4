@@ -79,7 +79,7 @@ func (u *userPG) GetUserByID(user *models.User) errs.MessageErr {
 	return nil
 }
 
-func (u *userPG) UpdateBalance(user *models.User) (*models.User, errs.MessageErr) {
+func (u *userPG) UpdateUser(user *models.User) (*models.User, errs.MessageErr) {
 	err := u.db.Model(user).Updates(user).Error
 
 	if err != nil {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"final-project-3/handlers"
+	"final-project-4/handlers"
 )
 
 const port = ":8080"
