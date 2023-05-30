@@ -39,7 +39,7 @@ func StartApp() *gin.Engine {
 	{
 		usersRouter.POST("/register", userHandler.RegisterUser)
 		usersRouter.POST("/login", userHandler.LoginUser)
-		usersRouter.PATCH("/topup", middlewares.Authentication(), userHandler.UpdateBalance)
+		usersRouter.PATCH("/topup", middlewares.Authentication(), userHandler.TopupBalance)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
