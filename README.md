@@ -10,7 +10,7 @@ Users
 Categories
 1. POST - http://localhost:8080/categories - Create a category
 2. GET - http://localhost:8080/categories - Get all categories
-3. PATCH - http://localhost:8080/categories/{categoryId} - Update a category
+3. PATCH - http://localhost:8080/categories/{categoryId} - Update a category's type
 4. DELETE - http://localhost:8080/categories/{categoryId} - Delete a category
 
 Products
@@ -31,11 +31,14 @@ TransactionHistories
 
 ## Pembagian Tugas
 Prinata Rakha Santoso
-- Initialized App
+- Initialized App and Models
 - Users (Register, Login, Topup)
+- Product (Create, Get all)
+- TransactionHistories (Create)
 
 Iqbal Hasanu Hamdani
--
+- TransactionHistories (Get my-transactions, Get user-transactions)
 
 Angga Anugerah Saputro
--
+- Categories (Create, Get all, Update, Delete)
+- Product (Update, Delete)
