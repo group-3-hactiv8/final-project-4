@@ -37,7 +37,7 @@ func (u *userPG) SeedingAdmin() {
 			log.Println(message)
 		}
 	} else { // baru buat admin pertama kali
-		log.Println("\nAdmin has been created successfully\n")
+		log.Println("\nAdmin has been created successfully\n ")
 	}
 
 }
