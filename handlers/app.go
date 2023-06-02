@@ -5,6 +5,7 @@ import (
 	// _ "final-project-4/docs"
 	"final-project-4/handlers/http_handlers"
 	"final-project-4/middlewares"
+	"final-project-4/repositories/product_repository/product_pg"
 	"final-project-4/repositories/user_repository/user_pg"
 	"final-project-4/services"
 
@@ -43,6 +44,19 @@ func StartApp() *gin.Engine {
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	// tambahin authorization cateogry dan product khusus admin
+
+	productRepo := product_pg.NewProductPG(db)
+	productService := services.NewProductService(productRepo)
+	productHandler := http_handlers.NewProductHandler(productService)
+
+	productsRouter := router.Group("/products")
+	productsRouter.Use(middlewares.Authentication())
+	{
+		productsRouter.POST("/", productHandler.CreateProduct)
+		productsRouter.GET("/", productHandler.GetAllProducts)
+	}
 
 	return router
 

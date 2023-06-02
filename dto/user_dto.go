@@ -42,7 +42,7 @@ type NewUserResponse struct {
 }
 
 type LoginUserRequest struct {
-	Email    string `json:"email" valid:"required~Your Email is required"`
+	Email    string `json:"email" valid:"required~Your Email is required, email~Invalid email format"`
 	Password string `json:"password" valid:"required~Your password is required"`
 }
 

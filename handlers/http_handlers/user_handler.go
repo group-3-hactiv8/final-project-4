@@ -62,7 +62,7 @@ func (u *userHandler) RegisterUser(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			user	body		dto.LoginUserRequest	true	"Login user request body"
-//	@Success		200		{object}	dto.NewUserResponse
+//	@Success		200		{object}	dto.LoginUserResponse
 //	@Failure		422		{object}	errs.MessageErrData
 //	@Failure		400		{object}	errs.MessageErrData
 //	@Router			/users/login [post]
