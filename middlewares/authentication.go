@@ -27,6 +27,7 @@ func Authentication() gin.HandlerFunc {
 		data := verifyToken.(jwt.MapClaims)
 
 		id := uint(data["id"].(float64))
+		// ada key "email" ga?
 		if _, isExist := data["email"]; !isExist {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error":   "Unauthenticated",
@@ -43,10 +44,10 @@ func Authentication() gin.HandlerFunc {
 		userRepo := user_pg.NewUserPG(db)
 
 		// does a user exist with this id?
-		if errNotFound := userRepo.GetUserByID(initialUser); err != nil {
+		if errNotFound := userRepo.GetUserByID(initialUser); errNotFound != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error":   "Unauthenticated",
-				"message": errNotFound.Message(),
+				"message": "invalid token",
 			})
 			return
 		}
