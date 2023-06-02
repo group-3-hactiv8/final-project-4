@@ -5,7 +5,9 @@ import (
 	// _ "final-project-4/docs"
 	"final-project-4/handlers/http_handlers"
 	"final-project-4/middlewares"
+	"final-project-4/repositories/category_repository/category_pg"
 	"final-project-4/repositories/product_repository/product_pg"
+	"final-project-4/repositories/transaction_history_repository/transaction_history_pg"
 	"final-project-4/repositories/user_repository/user_pg"
 	"final-project-4/services"
 
@@ -43,9 +45,15 @@ func StartApp() *gin.Engine {
 		usersRouter.PATCH("/topup", middlewares.Authentication(), userHandler.TopupBalance)
 	}
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	categoryRepo := category_pg.NewCategoryPG(db)
+	// categoryService := services.NewCategoryService(categoryRepo)
+	// categoryHandler := http_handlers.NewCategoryHandler(categoryService)
 
-	// tambahin authorization cateogry dan product khusus admin
+	// categoryRouter := router.Group("/categories")
+	// categoryRouter.Use(middlewares.Authentication())
+	// {
+	// 	categoryRouter.
+	// }
 
 	productRepo := product_pg.NewProductPG(db)
 	productService := services.NewProductService(productRepo)
@@ -54,9 +62,21 @@ func StartApp() *gin.Engine {
 	productsRouter := router.Group("/products")
 	productsRouter.Use(middlewares.Authentication())
 	{
-		productsRouter.POST("/", productHandler.CreateProduct)
-		productsRouter.GET("/", productHandler.GetAllProducts)
+		productsRouter.POST("/", middlewares.ProductAuthorization(), productHandler.CreateProduct)
+		productsRouter.GET("/", productHandler.GetAllProducts) // fitur ini emg ga dicek admin atau bukan, jd gapake authorization
 	}
+
+	transactionHistoryRepo := transaction_history_pg.NewTransactionHistoryPG(db)
+	transactionHistoryService := services.NewTransactionHistoryService(transactionHistoryRepo, productRepo, userRepo, categoryRepo)
+	transactionHistoryHandler := http_handlers.NewTransactionHistoryHandler(transactionHistoryService)
+
+	transactionHistoryRouter := router.Group("/transactions")
+	transactionHistoryRouter.Use(middlewares.Authentication())
+	{
+		transactionHistoryRouter.POST("/", transactionHistoryHandler.CreateTransaction)
+	}
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return router
 
