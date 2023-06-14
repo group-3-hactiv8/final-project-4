@@ -45,15 +45,21 @@ func StartApp() *gin.Engine {
 		usersRouter.PATCH("/topup", middlewares.Authentication(), userHandler.TopupBalance)
 	}
 
+	
 	categoryRepo := category_pg.NewCategoryPG(db)
-	// categoryService := services.NewCategoryService(categoryRepo)
-	// categoryHandler := http_handlers.NewCategoryHandler(categoryService)
+	categoryService := services.NewCategoryService(categoryRepo)
+	categoryHandler := http_handlers.NewCategoryHandler(categoryService)
 
-	// categoryRouter := router.Group("/categories")
-	// categoryRouter.Use(middlewares.Authentication())
-	// {
-	// 	categoryRouter.
-	// }
+	categoryRouter := router.Group("/category")
+
+	categoryRouter.Use(middlewares.Authentication())
+	{
+		categoryRouter.POST("/", middlewares.CategoryAuthorization(), categoryHandler.CreateCategory)
+		categoryRouter.PATCH("/:categoryId", middlewares.CategoryAuthorization(),  categoryHandler.UpdateCategory)
+		categoryRouter.GET("/", middlewares.CategoryAuthorization(), categoryHandler.GetAllCategory)
+		categoryRouter.DELETE("/:categoryId", middlewares.CategoryAuthorization(), categoryHandler.DeleteCategory)
+	} 
+
 
 	productRepo := product_pg.NewProductPG(db)
 	productService := services.NewProductService(productRepo)
@@ -64,9 +70,11 @@ func StartApp() *gin.Engine {
 	{
 		productsRouter.POST("/", middlewares.ProductAuthorization(), productHandler.CreateProduct)
 		productsRouter.GET("/", productHandler.GetAllProducts) // fitur ini emg ga dicek admin atau bukan, jd gapake authorization
+		productsRouter.PUT("/:productId", middlewares.ProductAuthorization(), productHandler.UpdateProducts)
+		productsRouter.DELETE("/:productId", middlewares.ProductAuthorization(), productHandler.DeleteProduct)
 	}
 
-	transactionHistoryRepo := transaction_history_pg.NewTransactionHistoryPG(db)
+	transactionHistoryRepo := transaction_history_pg.NewTransactionHistoryPG(db) 
 	transactionHistoryService := services.NewTransactionHistoryService(transactionHistoryRepo, productRepo, userRepo, categoryRepo)
 	transactionHistoryHandler := http_handlers.NewTransactionHistoryHandler(transactionHistoryService)
 
