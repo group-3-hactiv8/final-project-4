@@ -77,8 +77,7 @@ func (u *userService) TopupBalance(id uint, payload *dto.TopupBalanceRequest) (*
 	initialUser := &models.User{}
 	initialUser.ID = id
 
-	err := u.userRepo.GetUserByID(initialUser)
-
+	_, err := u.userRepo.GetUserByID(initialUser.ID)
 	if err != nil {
 		return nil, err
 	}
