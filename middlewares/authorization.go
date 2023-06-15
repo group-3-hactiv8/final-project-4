@@ -10,6 +10,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// func ProductAuthorization() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		db := database.GetPostgresInstance()
+// 		userData := c.MustGet("userData").(jwt.MapClaims)
+// 		userId := uint(userData["id"].(float64))
+// 		initialUser := &models.User{}
+// 		initialUser.ID = userId
+
+// 		userRepo := user_pg.NewUserPG(db)
+// 		err := userRepo.GetUserByID(initialUser)
+// 		// abis di Get, objek initialUser akan terupdate,
+// 		// smua attribute nya akan terisi.
+
+// 		// user nya fix ada karna udh di cek di authentication,
+// 		// tp cek dulu role nya "admin" bukan?
+// 		if initialUser.Role != "admin" {
+// 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+// 				"error":   "Unauthorized",
+// 				"message": "You are not allowed to access this product feature",
+// 			})
+// 			return
+// 		}
+
+// 		c.Next()
+// 	}
+// }
+
 func ProductAuthorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := database.GetPostgresInstance()
@@ -19,13 +46,16 @@ func ProductAuthorization() gin.HandlerFunc {
 		initialUser.ID = userId
 
 		userRepo := user_pg.NewUserPG(db)
-		userRepo.GetUserByID(initialUser)
-		// abis di Get, objek initialUser akan terupdate,
-		// smua attribute nya akan terisi.
+		user, err := userRepo.GetUserByID(initialUser.ID) // Menggunakan initialUser.ID sebagai argumen
 
-		// user nya fix ada karna udh di cek di authentication,
-		// tp cek dulu role nya "admin" bukan?
-		if initialUser.Role != "admin" {
+		if err != nil {
+			// Handle error
+			return
+		}
+
+		// user nya fix ada karena sudah dicek di authentication,
+		// tapi perlu dicek dulu rolenya "admin" bukan?
+		if user.Role != "admin" {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
 				"error":   "Unauthorized",
 				"message": "You are not allowed to access this product feature",
@@ -37,40 +67,27 @@ func ProductAuthorization() gin.HandlerFunc {
 	}
 }
 
-// func TaskAuthorization() gin.HandlerFunc {
+
+
+// func CategoryAuthorization() gin.HandlerFunc {
 // 	return func(c *gin.Context) {
 // 		db := database.GetPostgresInstance()
-// 		// misal ada user yg mau akses task berdasarkan taskId
-// 		// nya melalui param. Param = path variable
-// 		taskId, err := strconv.Atoi(c.Param("taskId"))
-// 		if err != nil {
-// 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-// 				"error":   "Bad Request",
-// 				"message": "Invalid parameter (gada taskId)",
-// 			})
-// 			return
-// 		}
 // 		userData := c.MustGet("userData").(jwt.MapClaims)
 // 		userId := uint(userData["id"].(float64))
-// 		task := models.Task{}
+// 		initialUser := &models.User{}
+// 		initialUser.ID = userId
 
-// 		// cek product yg dicari berdasarkan product id nya ada atau engga
-// 		err = db.Select("user_id").First(&task, uint(taskId)).Error
+// 		userRepo := user_pg.NewUserPG(db)
+// 		userRepo.GetUserByID(initialUser)
+// 		// abis di Get, objek initialUser akan terupdate,
+// 		// smua attribute nya akan terisi.
 
-// 		if err != nil {
-// 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-// 				"error":   "Not Found",
-// 				"message": "Product not found",
-// 			})
-// 			return
-// 		}
-
-// 		// task nya ada, tp cek dulu userId nya sama dengan
-// 		// userId si user yg lg login ngga?
-// 		if task.UserId != userId {
+// 		// user nya fix ada karna udh di cek di authentication,
+// 		// tp cek dulu role nya "admin" bukan?
+// 		if initialUser.Role != "admin" {
 // 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
 // 				"error":   "Unauthorized",
-// 				"message": "You are not allowed to access this task",
+// 				"message": "You are not allowed to access this category feature",
 // 			})
 // 			return
 // 		}
@@ -78,8 +95,6 @@ func ProductAuthorization() gin.HandlerFunc {
 // 		c.Next()
 // 	}
 // }
-
-
 
 func CategoryAuthorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -90,13 +105,16 @@ func CategoryAuthorization() gin.HandlerFunc {
 		initialUser.ID = userId
 
 		userRepo := user_pg.NewUserPG(db)
-		userRepo.GetUserByID(initialUser)
-		// abis di Get, objek initialUser akan terupdate,
-		// smua attribute nya akan terisi.
+		user, err := userRepo.GetUserByID(initialUser.ID) // Menggunakan initialUser.ID sebagai argumen
 
-		// user nya fix ada karna udh di cek di authentication,
-		// tp cek dulu role nya "admin" bukan?
-		if initialUser.Role != "admin" {
+		if err != nil {
+			// Handle error
+			return
+		}
+
+		// user nya fix ada karena sudah dicek di authentication,
+		// tapi perlu dicek dulu rolenya "admin" bukan?
+		if user.Role != "admin" {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
 				"error":   "Unauthorized",
 				"message": "You are not allowed to access this category feature",
@@ -107,3 +125,34 @@ func CategoryAuthorization() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+
+func TaskAuthorization() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := database.GetPostgresInstance()
+		userData := c.MustGet("userData").(jwt.MapClaims)
+		userId := uint(userData["id"].(float64))
+		initialUser := &models.User{}
+		initialUser.ID = userId
+
+		userRepo := user_pg.NewUserPG(db)
+		user, err := userRepo.GetUserByID(initialUser.ID) // Menggunakan initialUser.ID sebagai argumen
+		if err != nil {
+			// Handle error
+			return
+		}
+
+		// user nya fix ada karena sudah dicek di authentication,
+		// tapi perlu dicek dulu rolenya "admin" bukan?
+		if user.Role != "admin" {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+				"error":   "Unauthorized",
+				"message": "You are not allowed to access this task feature",
+			})
+			return
+		}
+
+		c.Next()
+	}
+}
+
