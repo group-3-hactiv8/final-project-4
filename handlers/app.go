@@ -72,7 +72,7 @@ func StartApp() *gin.Engine {
 		productsRouter.DELETE("/:productId", middlewares.ProductAuthorization(), productHandler.DeleteProduct)
 	}
 
-	transactionHistoryRepo := transaction_history_pg.NewTransactionHistoryPG(db)
+	transactionHistoryRepo := transaction_history_pg.NewTransactionHistoryPG(db, productRepo,userRepo,categoryRepo,)
 	transactionHistoryService := services.NewTransactionHistoryService(transactionHistoryRepo, productRepo, userRepo, categoryRepo)
 	transactionHistoryHandler := http_handlers.NewTransactionHistoryHandler(transactionHistoryService)
 
@@ -81,6 +81,7 @@ func StartApp() *gin.Engine {
 	{
 		transactionHistoryRouter.POST("/", transactionHistoryHandler.CreateTransaction)
 		transactionHistoryRouter.GET("/my-transactions", middlewares.Authentication(), transactionHistoryHandler.GetTransactionsByUserID)
+		transactionHistoryRouter.GET("/user-transactions", middlewares.Authentication(), middlewares.TaskAuthorization(), transactionHistoryHandler.GetUserTransactions)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
