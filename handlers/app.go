@@ -80,6 +80,7 @@ func StartApp() *gin.Engine {
 	transactionHistoryRouter.Use(middlewares.Authentication())
 	{
 		transactionHistoryRouter.POST("/", transactionHistoryHandler.CreateTransaction)
+		transactionHistoryRouter.GET("/my-transactions", middlewares.Authentication(), transactionHistoryHandler.GetTransactionsByUserID)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
