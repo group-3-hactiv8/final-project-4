@@ -14,6 +14,7 @@ type Product struct {
 	Stock      uint   `gorm:"not null"`
 	CategoryId uint   `gorm:"not null"`
 	Category   Category
+	TransactionHistories []TransactionHistory `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 // stackoverflow.com/questions/6878590/the-maximum-value-for-an-int-type-in-go
