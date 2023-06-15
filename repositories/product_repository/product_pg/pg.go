@@ -54,30 +54,42 @@ func (p *productPG) GetAllProducts() (*[]models.Product, uint, errs.MessageErr) 
 	return allProducts, uint(totalCount), nil
 }
 
-func (p *productPG) GetProductByID(product *models.Product) errs.MessageErr {
-	err := p.db.Where("id = ?", product.ID).Take(&product).Error
-	// Karna di Take, objek product akan terupdate.
+// func (p *productPG) GetProductByID(product *models.Product) errs.MessageErr {
+// 	err := p.db.Where("id = ?", product.ID).Take(&product).Error
+// 	// Karna di Take, objek product akan terupdate.
 
-	if err != nil {
-		message := fmt.Sprintf("product with ID %v not found", product.ID)
-		err2 := errs.NewNotFound(message)
-		return err2
+// 	if err != nil {
+// 		message := fmt.Sprintf("product with ID %v not found", product.ID)
+// 		err2 := errs.NewNotFound(message)
+// 		return err2
+// 	}
+
+// 	return nil
+// }
+
+
+func (p *productPG) GetProductByID(id uint) (*models.Product, errs.MessageErr) {
+	var product *models.Product
+	if err := p.db.First(&product, id).Error; err != nil {
+		return nil, errs.NewNotFound(fmt.Sprintf("Product with id %d is not found",  product.ID))
 	}
 
-	return nil
+	return product, nil
 }
 
-func (c *productPG) GetProductByIdUpdate(id uint) (*models.Product, errs.MessageErr){
+func (c *productPG) GetProductByIdUpdate(id uint) (*models.Product, errs.MessageErr) {
 	var product models.Product
 	result := c.db.First(&product, id)
 
 	if err := result.Error; err != nil {
-		log.Println("Error : ",err.Error())
-		error := errs.NewNotFound(fmt.Sprintf("failed to get Product by id :", product.ID))
+		log.Println("Error:", err.Error())
+		error := errs.NewNotFound(fmt.Sprintf("failed to get Product by id: %d", product.ID))
 		return nil, error
 	}
 	return &product, nil
 }
+
+
 
 func (p *productPG) UpdateStock(product *models.Product) errs.MessageErr {
 	err := p.db.Model(&models.Product{}).Where("id = ?", product.ID).Update("stock", product.Stock).Error
@@ -110,4 +122,18 @@ func (c *productPG) DeleteProducts(product *models.Product) errs.MessageErr {
 		return error
 	}
 	return  nil
+}
+
+func (p *productPG) DecrementStock(id uint, quantity uint, tx *gorm.DB) errs.MessageErr {
+	product, err := p.GetProductByID(id)
+	if err != nil {
+		return err
+	}
+
+	product.Stock -= quantity
+	if err := tx.Save(product).Error; err != nil {
+		return errs.NewInternalServerError("Failed to decrement stock")
+	}
+
+	return nil
 }
