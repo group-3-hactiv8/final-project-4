@@ -59,6 +59,20 @@ type NewProductResponse struct {
 	CreatedAt  time.Time `json:"created_at"`
 }
 
+type UpdateProductResponse struct {
+	ID         uint      `json:"id"`
+	Title      string    `json:"title"`
+	Price      uint      `json:"price"`
+	Stock      uint      `json:"stock"`
+	CategoryId uint      `json:"category_Id"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type AllProductsResponse struct {
 	Products []NewProductResponse `json:"products"`
+}
+
+type DeleteProductResponse struct {
+	Message string `json:"message"`
 }

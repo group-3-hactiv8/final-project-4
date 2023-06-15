@@ -1,0 +1,585 @@
+basePath: /
+definitions:
+  dto.AllProductsResponse:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/dto.NewProductResponse'
+        type: array
+    type: object
+  dto.DeleteCategoryResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.DeleteProductResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.GetAllCategoryResponse:
+    properties:
+      Product:
+        items:
+          $ref: '#/definitions/dto.ProductForGetAllCategoryResponse'
+        type: array
+      created_at:
+        type: string
+      id:
+        type: integer
+      sold_product_amount:
+        type: integer
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.LoginUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.LoginUserResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  dto.NewCategoryRequest:
+    properties:
+      type:
+        type: string
+    type: object
+  dto.NewCategoryResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      sold_product_amount:
+        type: integer
+      type:
+        type: string
+    type: object
+  dto.NewProductRequest:
+    properties:
+      category_Id:
+        type: integer
+      price:
+        type: integer
+      stock:
+        type: integer
+      title:
+        type: string
+    type: object
+  dto.NewProductResponse:
+    properties:
+      category_Id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      price:
+        type: integer
+      stock:
+        type: integer
+      title:
+        type: string
+    type: object
+  dto.NewTransactionRequest:
+    properties:
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  dto.NewTransactionResponse:
+    properties:
+      message:
+        type: string
+      transaction_bill:
+        $ref: '#/definitions/dto.TransactionBillResponse'
+    type: object
+  dto.NewUserRequest:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.NewUserResponse:
+    properties:
+      balance:
+        type: integer
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+    type: object
+  dto.ProductForGetAllCategoryResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      price:
+        type: integer
+      stock:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.TopupBalanceRequest:
+    properties:
+      balance:
+        type: integer
+    type: object
+  dto.TopupBalanceResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.TransactionBillResponse:
+    properties:
+      product_title:
+        type: string
+      quantity:
+        type: integer
+      total_price:
+        type: integer
+    type: object
+  dto.UpdateCategoryRequest:
+    properties:
+      type:
+        type: string
+    type: object
+  dto.UpdateCategoryResponse:
+    properties:
+      id:
+        type: integer
+      sold_product_amount:
+        type: integer
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.UpdateProductResponse:
+    properties:
+      category_Id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      price:
+        type: integer
+      stock:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  errs.MessageErrData:
+    properties:
+      error:
+        example: BAD_REQUEST
+        type: string
+      message:
+        example: This is an error message
+        type: string
+      statusCode:
+        example: 400
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    name: Swagger API Team
+  description: This is a server for Toko Belanja.
+  termsOfService: http://swagger.io/terms/
+  title: Toko Belanja API
+  version: "1.0"
+paths:
+  /category:
+    get:
+      description: Get all category by json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetAllCategoryResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Get all category
+      tags:
+      - category
+    post:
+      consumes:
+      - application/json
+      description: Register a category by json
+      parameters:
+      - description: Create Category request body
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.NewCategoryResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Register a category
+      tags:
+      - category
+  /category/{categoryId}:
+    patch:
+      consumes:
+      - application/json
+      description: Update a category
+      parameters:
+      - description: Update category request body
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCategoryRequest'
+      - description: category ID request
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Update a category
+      tags:
+      - category
+  /category/{id}:
+    delete:
+      description: Delete a Category by param
+      parameters:
+      - description: Category ID request
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Delete a Category
+      tags:
+      - category
+  /product/{id}:
+    delete:
+      description: Delete a Product by param
+      parameters:
+      - description: product ID request
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Delete a Product
+      tags:
+      - product
+  /products:
+    get:
+      description: Get all products by json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AllProductsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Get all products
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create a product by json
+      parameters:
+      - description: Create product request body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.NewProductResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Create a product
+      tags:
+      - products
+  /products/{productId}:
+    put:
+      consumes:
+      - application/json
+      description: Update a product
+      parameters:
+      - description: Update Product request body
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewProductRequest'
+      - description: Product ID request
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Update a product
+      tags:
+      - product
+  /transactions:
+    post:
+      consumes:
+      - application/json
+      description: Create a Transaction  by json
+      parameters:
+      - description: Create Transaction request body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.NewTransactionResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Create a Transaction
+      tags:
+      - transactions
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Register a user by json
+      parameters:
+      - description: Create user request body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.NewUserResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Register a user
+      tags:
+      - users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login by json
+      parameters:
+      - description: Login user request body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Login
+      tags:
+      - users
+  /users/topup:
+    patch:
+      consumes:
+      - application/json
+      description: Add more balance of a user by json
+      parameters:
+      - description: Add more balance of a user request body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TopupBalanceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TopupBalanceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Add more balance of a user
+      tags:
+      - users
+swagger: "2.0"
