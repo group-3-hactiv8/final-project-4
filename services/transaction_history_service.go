@@ -12,6 +12,10 @@ import (
 
 type TransactionHistoryService interface {
 	CreateTransaction(payload *dto.NewTransactionRequest, user_id uint) (*dto.NewTransactionResponse, errs.MessageErr)
+	GetTransactionsByUserID(user_id uint) ([]dto.GetTransactionsByUserIDResponse, errs.MessageErr)
+
+	GetUserTransactions() ([]dto.GetUserTransactionsResponse, errs.MessageErr)
+
 }
 
 type transactionHistoryService struct {
@@ -43,7 +47,7 @@ func (th *transactionHistoryService) CreateTransaction(payload *dto.NewTransacti
 	product := &models.Product{}
 	product.ID = payload.ProductId
 
-	err := th.productRepo.GetProductByID(product)
+	product, err := th.productRepo.GetProductByID(newTransaction.ProductId)
 	if err != nil {
 		return nil, err
 	}
@@ -61,10 +65,12 @@ func (th *transactionHistoryService) CreateTransaction(payload *dto.NewTransacti
 	// check if user's balance is more than the total price
 	user := &models.User{}
 	user.ID = user_id
-	err = th.userRepo.GetUserByID(user)
+	_, err = th.userRepo.GetUserByID(user.ID)
 	if err != nil {
 		return nil, err
 	}
+	
+	
 	// filling user's attributes from query to get user's balance data
 
 	if user.Balance < totalPrice {
@@ -110,6 +116,94 @@ func (th *transactionHistoryService) CreateTransaction(payload *dto.NewTransacti
 	response := &dto.NewTransactionResponse{
 		Message:         "You have successfully purchased the product",
 		TransactionBill: txBillResp,
+	}
+
+	return response, nil
+}
+
+
+func (th *transactionHistoryService) GetTransactionsByUserID(user_id uint) ([]dto.GetTransactionsByUserIDResponse, errs.MessageErr) {
+    transactions, err := th.transactionHistoryRepo.GetTransactionsByUserID(user_id)
+    if err != nil {
+        return nil, err
+    }
+
+    response := []dto.GetTransactionsByUserIDResponse{}
+    for _, transaction := range transactions {
+		product, err := th.productRepo.GetProductByID(transaction.ProductId)
+		// product, err := th.productRepo.GetProductByID(transaction.ProductId)
+        if err != nil {
+            // 
+            // 
+            return nil, err
+        }
+
+        response = append(response, dto.GetTransactionsByUserIDResponse{
+            ID:         transaction.ID,
+            ProductID:  transaction.ProductId,
+            UserID:     transaction.UserId,
+            Quantity:   transaction.Quantity,
+            TotalPrice: transaction.TotalPrice,
+            Product: dto.ProductDataWithCategoryIDAndIntegerPrice{
+                ID:         product.ID,
+                Title:      product.Title,
+                Price:      product.Price,
+                Stock:      product.Stock,
+                CategoryID: product.CategoryId,
+                CreatedAt:  product.CreatedAt,
+                UpdatedAt:  product.UpdatedAt,
+            },
+        })
+    }
+
+    return response, nil
+}
+
+
+
+
+func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransactionsResponse, errs.MessageErr) {
+	transactions, err := th.transactionHistoryRepo.GetUserTransactions()
+	if err != nil {
+		return nil, err
+	}
+
+	response := []dto.GetUserTransactionsResponse{}
+	for _, transaction := range transactions {
+		product, err := th.productRepo.GetProductByID(transaction.ProductId)
+		if err != nil {
+			return nil, err
+		}
+
+		user, errGetUser := th.userRepo.GetUserByID(transaction.UserId)
+		if errGetUser != nil {
+			return nil, errGetUser
+		}
+
+		response = append(response, dto.GetUserTransactionsResponse{
+			ID:         transaction.ID,
+			ProductID:  transaction.ProductId,
+			UserID:     transaction.UserId,
+			Quantity:   transaction.Quantity,
+			TotalPrice: transaction.TotalPrice,
+			Product: dto.ProductDataWithCategoryIDAndIntegerPrice{
+				ID:         product.ID,
+				Title:      product.Title,
+				Price:      product.Price,
+				Stock:      product.Stock,
+				CategoryID: product.CategoryId,
+				CreatedAt:  product.CreatedAt,
+				UpdatedAt:  product.UpdatedAt,
+			},
+			User: dto.UserData{
+				ID:        user.ID,
+				Email:     user.Email,
+				FullName:  user.FullName,
+				Balance:   user.Balance,
+				CreatedAt: user.CreatedAt,
+				UpdatedAt: user.UpdatedAt,
+			},
+		})
 	}
 
 	return response, nil
