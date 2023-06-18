@@ -22,13 +22,19 @@ import (
 // @description This is a server for Toko Belanja.
 // @termsOfService http://swagger.io/terms/
 // @contact.name Swagger API Team
-// @host localhost:8080
+// @host final-project-4-production.up.railway.app
 // @BasePath /
 func StartApp() *gin.Engine {
 	database.StartDB()
 	db := database.GetPostgresInstance()
 
 	router := gin.Default()
+
+	router.GET("/health-check-fp4", func (c *gin.Context){
+		c.JSON(200, gin.H{
+			"appName" : "TokoBelanja",
+		})
+	})
 
 	userRepo := user_pg.NewUserPG(db)
 	userService := services.NewUserService(userRepo)

@@ -65,7 +65,7 @@ func (th *transactionHistoryHandler) CreateTransaction(ctx *gin.Context) {
 //
 //	@Summary		Get user transaction
 //	@Description	Get user transaction by json
-//	@Tags			transaction
+//	@Tags			transactions
 //	@Produce		json
 //	@Success		200		{object}	dto.GetTransactionsByUserIDResponse 
 //	@Failure		401		{object}	errs.MessageErrData
@@ -92,7 +92,7 @@ func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
 //
 //	@Summary		Get user transaction
 //	@Description	Get user transaction by json
-//	@Tags			transaction
+//	@Tags			transactions
 //	@Produce		json
 //	@Success		200		{object}	dto.GetUserTransactions
 //	@Failure		401		{object}	errs.MessageErrData

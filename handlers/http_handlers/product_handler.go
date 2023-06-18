@@ -80,10 +80,10 @@ func (p *productHandler) GetAllProducts(ctx *gin.Context) {
 //
 //	@Summary		Update a product 
 //	@Description	Update a product 
-//	@Tags			product
+//	@Tags			products
 //	@Accept			json
 //	@Produce		json
-//	@Param			product		body		dto.NewProductRequest	true	"Update Product request body"
+//	@Param			products		body		dto.NewProductRequest	true	"Update Product request body"
 //	@Param			productId	path		uint						true	"Product ID request"
 //	@Success		200			{object}	dto.UpdateProductResponse
 //	@Failure		401			{object}	errs.MessageErrData
@@ -129,13 +129,13 @@ func (p *productHandler) UpdateProducts(ctx *gin.Context) {
 //
 //	@Summary		Delete a Product
 //	@Description	Delete a Product by param
-//	@Tags			product
+//	@Tags			products
 //	@Produce		json
 //	@Param			productId	 path		uint						true	"product ID request"
 //	@Success		200			{object}	dto.DeleteProductResponse
 //	@Failure		401			{object}	errs.MessageErrData
 //	@Failure		400			{object}	errs.MessageErrData
-//	@Router			/product/{id} [delete]
+//	@Router			/products/{id} [delete]
 func (p *productHandler) DeleteProduct(ctx *gin.Context) {
 	productId := ctx.Param("productId")
 	productIdUint, err := strconv.ParseUint(productId, 10, 16)
