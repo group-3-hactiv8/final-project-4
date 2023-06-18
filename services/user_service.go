@@ -3,7 +3,6 @@ package services
 import (
 	"final-project-4/dto"
 	"final-project-4/helpers"
-	"final-project-4/models"
 	"final-project-4/pkg/errs"
 	"final-project-4/repositories/user_repository"
 	"fmt"
@@ -74,18 +73,14 @@ func (u *userService) LoginUser(payload *dto.LoginUserRequest) (*dto.LoginUserRe
 }
 
 func (u *userService) TopupBalance(id uint, payload *dto.TopupBalanceRequest) (*dto.TopupBalanceResponse, errs.MessageErr) {
-	initialUser := &models.User{}
-	initialUser.ID = id
-
-	err := u.userRepo.GetUserByID(initialUser)
-
+	user, err := u.userRepo.GetUserByID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	initialUser.Balance += payload.Balance
+	user.Balance += payload.Balance
 
-	updatedUser, err := u.userRepo.UpdateUser(initialUser)
+	updatedUser, err := u.userRepo.UpdateUser(user)
 	if err != nil {
 		return nil, err
 	}

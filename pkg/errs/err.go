@@ -65,3 +65,5 @@ func NewUnauthorized(message string) MessageErr {
 		ErrError:      "UNAUTHORIZED",
 	}
 }
+
+

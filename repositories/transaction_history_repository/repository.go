@@ -7,4 +7,8 @@ import (
 
 type TransactionHistoryRepository interface {
 	CreateTransaction(*models.TransactionHistory) (*models.TransactionHistory, errs.MessageErr)
+	GetTransactionsByUserID(userID uint) ([]models.TransactionHistory, errs.MessageErr)
+
+	GetUserTransactions() ([]models.TransactionHistory, errs.MessageErr)
+
 }

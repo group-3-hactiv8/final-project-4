@@ -56,15 +56,16 @@ func (c *categoryPG) GetCategoryByID(category *models.Category) errs.MessageErr 
 	return nil
 }
 
-func (c *categoryPG) GetCategoryById(id uint) (*models.Category, errs.MessageErr){
+func (c *categoryPG) GetCategoryById(id uint) (*models.Category, errs.MessageErr) {
 	var category models.Category
 	result := c.db.First(&category, id)
 
 	if err := result.Error; err != nil {
-		log.Println("Error : ",err.Error())
-		error := errs.NewNotFound(fmt.Sprintf("failed to get category by id :", category.ID))
+		log.Println("Error:", err.Error())
+		error := errs.NewNotFound(fmt.Sprintf("failed to get category by id: %d", category.ID))
 		return nil, error
 	}
+
 	return &category, nil
 }
 
@@ -87,7 +88,7 @@ func (r *categoryPG) GetProductsByCategoryID(categoryId uint) ([]models.Product,
 
 	if err != nil {
 		log.Println("Error : ",err.Error())
-		error := errs.NewNotFound(fmt.Sprintf("failed to get Product by id :", categoryId))
+		error := errs.NewNotFound(fmt.Sprintf("failed to get Product by id : %v", categoryId))
 		return nil, error
 	}
 

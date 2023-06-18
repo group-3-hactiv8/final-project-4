@@ -54,17 +54,17 @@ func (p *productPG) GetAllProducts() (*[]models.Product, uint, errs.MessageErr) 
 	return allProducts, uint(totalCount), nil
 }
 
-func (p *productPG) GetProductByID(product *models.Product) errs.MessageErr {
-	err := p.db.Where("id = ?", product.ID).Take(&product).Error
-	// Karna di Take, objek product akan terupdate.
+func (p *productPG) GetProductByID(productID uint) (*models.Product, errs.MessageErr) {
+	product := &models.Product{}
+	err := p.db.First(product, productID).Error
 
 	if err != nil {
-		message := fmt.Sprintf("product with ID %v not found", product.ID)
-		err2 := errs.NewNotFound(message)
-		return err2
+		message := fmt.Sprintf("Product with ID %v not found", productID)
+		err := errs.NewNotFound(message)
+		return nil, err
 	}
 
-	return nil
+	return product, nil
 }
 
 func (c *productPG) GetProductByIdUpdate(id uint) (*models.Product, errs.MessageErr){

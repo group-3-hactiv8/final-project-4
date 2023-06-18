@@ -96,3 +96,14 @@ func (u *TopupBalanceRequest) TopupBalanceRequestToModel() *models.User {
 type TopupBalanceResponse struct {
 	Message string `json:"message"`
 }
+
+
+
+type UserData struct {
+	ID        uint      `json:"id"`
+	Email     string    `json:"email"`
+	FullName  string    `json:"full_name"`
+	Balance   uint      `json:"balance"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

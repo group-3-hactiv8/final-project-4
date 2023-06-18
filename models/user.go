@@ -16,7 +16,10 @@ type User struct {
 	Password string `gorm:"not null" json:"password"`
 	Role     string `gorm:"not null" json:"role"`
 	Balance  uint   `gorm:"not null" json:"balance"`
+	TransactionHistories []TransactionHistory `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
+
+
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {
 	_, err := govalidator.ValidateStruct(u)
@@ -40,3 +43,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 		return errs.NewUnprocessableEntity(message)
 	}
 }
+
+
+
+

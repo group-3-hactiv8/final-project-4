@@ -39,3 +39,37 @@ type NewTransactionResponse struct {
 	Message         string                  `json:"message"`
 	TransactionBill TransactionBillResponse `json:"transaction_bill"`
 }
+
+
+type GetTransactionsByUserIDResponse struct {
+	ID         uint                                     `json:"id"`
+	ProductID  uint                                     `json:"product_id"`
+	UserID     uint                                     `json:"user_id"`
+	Quantity   uint                                     `json:"quantity"`
+	TotalPrice uint                                     `json:"total_price"`
+	Product    ProductDataWithCategoryIDAndIntegerPrice `json:"product"`
+}
+
+type GetUserTransactionsResponse struct {
+	ID         uint                                     `json:"id"`
+	ProductID  uint                                     `json:"product_id"`
+	UserID     uint                                     `json:"user_id"`
+	Quantity   uint                                     `json:"quantity"`
+	TotalPrice uint                                     `json:"total_price"`
+	Product    ProductDataWithCategoryIDAndIntegerPrice `json:"product"`
+	User       UserData                                 `json:"user"`
+}
+
+
+
+type GetUserTransactions struct {
+	ID         uint                                     `json:"id"`
+	ProductID  uint                                     `json:"product_id"`
+	UserID     uint                                     `json:"user_id"`
+	Quantity   uint                                     `json:"quantity"`
+	TotalPrice uint                                     `json:"total_price"`
+	Product    ProductDataWithCategoryIDAndIntegerPrice `json:"product"`
+	User       UserData                                 `json:"user"`
+}
+
+

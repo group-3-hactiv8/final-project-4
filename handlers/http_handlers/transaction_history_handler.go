@@ -2,6 +2,7 @@ package http_handlers
 
 import (
 	"final-project-4/dto"
+	"final-project-4/models"
 	"final-project-4/pkg/errs"
 	"final-project-4/services"
 	"net/http"
@@ -59,3 +60,50 @@ func (th *transactionHistoryHandler) CreateTransaction(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, createdTransactionHistory)
 }
+
+// GetTransactionsByUserID godoc
+//
+//	@Summary		Get user transaction
+//	@Description	Get user transaction by json
+//	@Tags			transaction
+//	@Produce		json
+//	@Success		200		{object}	dto.GetTransactionsByUserIDResponse 
+//	@Failure		401		{object}	errs.MessageErrData
+//	@Failure		500		{object}	errs.MessageErrData
+//	@Router			/my-transactions [get]
+func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
+	userData, ok := ctx.MustGet("userData").(*models.User)
+	if !ok {
+		newError := errs.NewBadRequest("Failed to get user data")
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	transactions, err :=  th.transactionHistoryService.GetTransactionsByUserID(userData.ID)
+	if err != nil {
+		ctx.JSON(err.StatusCode(), err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, transactions)
+}
+
+// GetUserTransactions godoc
+//
+//	@Summary		Get user transaction
+//	@Description	Get user transaction by json
+//	@Tags			transaction
+//	@Produce		json
+//	@Success		200		{object}	dto.GetUserTransactions
+//	@Failure		401		{object}	errs.MessageErrData
+//	@Failure		500		{object}	errs.MessageErrData
+//	@Router			/user-transactions [get]
+func (th *transactionHistoryHandler) GetUserTransactions(ctx *gin.Context) {
+	transactions, err := th.transactionHistoryService.GetUserTransactions()
+	if err != nil {
+		ctx.JSON(err.StatusCode(),err)
+		return
+	}
+	ctx.JSON(http.StatusOK, transactions)
+}
+
