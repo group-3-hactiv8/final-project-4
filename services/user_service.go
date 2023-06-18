@@ -27,6 +27,11 @@ func (u *userService) RegisterUser(payload *dto.NewUserRequest) (*dto.NewUserRes
 	newUser.Role = "customer"
 	newUser.Balance = 0
 
+	err := u.userRepo.GetUserByEmail(newUser)
+	if err == nil { // udh ke registered
+		return nil, errs.NewBadRequest("user with this email is already registered!")
+	}
+
 	createdUser, err := u.userRepo.RegisterUser(newUser)
 	if err != nil {
 		return nil, err
