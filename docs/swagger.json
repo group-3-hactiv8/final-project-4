@@ -1,16 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a server for Toko Belanja.",
-        "title": "Toko Belanja API",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "Swagger API Team"
-        },
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "localhost:8080",
-    "basePath": "/",
     "paths": {
         "/category": {
             "get": {
@@ -207,7 +199,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "transaction"
+                    "transactions"
                 ],
                 "summary": "Get user transaction",
                 "responses": {
@@ -225,47 +217,6 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    }
-                }
-            }
-        },
-        "/product/{id}": {
-            "delete": {
-                "description": "Delete a Product by param",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "product"
-                ],
-                "summary": "Delete a Product",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "product ID request",
-                        "name": "productId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.DeleteProductResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/errs.MessageErrData"
                         }
@@ -349,6 +300,47 @@
                 }
             }
         },
+        "/products/{id}": {
+            "delete": {
+                "description": "Delete a Product by param",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Delete a Product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "product ID request",
+                        "name": "productId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeleteProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    }
+                }
+            }
+        },
         "/products/{productId}": {
             "put": {
                 "description": "Update a product",
@@ -359,13 +351,13 @@
                     "application/json"
                 ],
                 "tags": [
-                    "product"
+                    "products"
                 ],
                 "summary": "Update a product",
                 "parameters": [
                     {
                         "description": "Update Product request body",
-                        "name": "product",
+                        "name": "products",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -467,7 +459,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "transaction"
+                    "transactions"
                 ],
                 "summary": "Get user transaction",
                 "responses": {
