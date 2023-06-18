@@ -62,7 +62,7 @@ func (u *userHandler) RegisterUser(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			user	body		dto.LoginUserRequest	true	"Login user request body"
-//	@Success		200		{object}	dto.NewUserResponse
+//	@Success		200		{object}	dto.LoginUserResponse
 //	@Failure		422		{object}	errs.MessageErrData
 //	@Failure		400		{object}	errs.MessageErrData
 //	@Router			/users/login [post]
@@ -90,21 +90,21 @@ func (u *userHandler) LoginUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, token)
 }
 
-// UpdateUser godoc
+// TopupBalance godoc
 //
-//	@Summary		Update a user
-//	@Description	Update a user by json
+//	@Summary		Add more balance of a user
+//	@Description	Add more balance of a user by json
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Param			user	body		dto.UpdateUserRequest	true	"Update a user request body"
-//	@Success		200		{object}	dto.UpdateUserResponse
+//	@Param			user	body		dto.TopupBalanceRequest	true	"Add more balance of a user request body"
+//	@Success		200		{object}	dto.TopupBalanceResponse
 //	@Failure		401		{object}	errs.MessageErrData
 //	@Failure		422		{object}	errs.MessageErrData
 //	@Failure		400		{object}	errs.MessageErrData
 //	@Router			/users/topup [patch]
-func (u *userHandler) UpdateBalance(ctx *gin.Context) {
-	var requestBody dto.UpdateUserRequest
+func (u *userHandler) TopupBalance(ctx *gin.Context) {
+	var requestBody dto.TopupBalanceRequest
 
 	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 		newError := errs.NewUnprocessableEntity(err.Error())
@@ -124,7 +124,7 @@ func (u *userHandler) UpdateBalance(ctx *gin.Context) {
 	userData := ctx.MustGet("userData").(jwt.MapClaims)
 	userId := uint(userData["id"].(float64))
 
-	updatedUserResponse, err2 := u.userService.UpdateUser(userId, &requestBody)
+	updatedUserResponse, err2 := u.userService.TopupBalance(userId, &requestBody)
 	if err2 != nil {
 		ctx.JSON(err2.StatusCode(), err2)
 		return

@@ -5,12 +5,13 @@ import (
 	"final-project-4/helpers"
 	"final-project-4/pkg/errs"
 	"final-project-4/repositories/user_repository"
+	"fmt"
 )
 
 type UserService interface {
 	RegisterUser(payload *dto.NewUserRequest) (*dto.NewUserResponse, errs.MessageErr)
 	LoginUser(payload *dto.LoginUserRequest) (*dto.LoginUserResponse, errs.MessageErr)
-	UpdateBalance(id uint, payload *dto.UpdateBalanceRequest) (*dto.UpdateBalanceResponse, errs.MessageErr)
+	TopupBalance(id uint, payload *dto.TopupBalanceRequest) (*dto.TopupBalanceResponse, errs.MessageErr)
 }
 
 type userService struct {
@@ -23,7 +24,8 @@ func NewUserService(userRepo user_repository.UserRepository) UserService {
 
 func (u *userService) RegisterUser(payload *dto.NewUserRequest) (*dto.NewUserResponse, errs.MessageErr) {
 	newUser := payload.UserRequestToModel()
-	newUser.Role = "member"
+	newUser.Role = "customer"
+	newUser.Balance = 0
 
 	createdUser, err := u.userRepo.RegisterUser(newUser)
 	if err != nil {
@@ -31,9 +33,11 @@ func (u *userService) RegisterUser(payload *dto.NewUserRequest) (*dto.NewUserRes
 	}
 
 	response := &dto.NewUserResponse{
+		ID:        createdUser.ID,
 		FullName:  createdUser.FullName,
 		Email:     createdUser.Email,
-		ID:        createdUser.ID,
+		Password:  createdUser.Password,
+		Balance:   createdUser.Balance,
 		CreatedAt: createdUser.CreatedAt,
 	}
 
@@ -68,21 +72,22 @@ func (u *userService) LoginUser(payload *dto.LoginUserRequest) (*dto.LoginUserRe
 	return response, nil
 }
 
-func (u *userService) UpdateBalance(id uint, payload *dto.UpdateBalanceRequest) (*dto.UpdateBalanceResponse, errs.MessageErr) {
-	userUpdateRequest := payload.UpdateBalanceRequestToModel()
-
-	userUpdateRequest.ID = id
-
-	updatedUser, err := u.userRepo.UpdateBalance(userUpdateRequest)
+func (u *userService) TopupBalance(id uint, payload *dto.TopupBalanceRequest) (*dto.TopupBalanceResponse, errs.MessageErr) {
+	user, err := u.userRepo.GetUserByID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	response := &dto.UpdateBalanceResponse{
-		FullName:  updatedUser.FullName,
-		Email:     updatedUser.Email,
-		ID:        updatedUser.ID,
-		UpdatedAt: updatedUser.UpdatedAt,
+	user.Balance += payload.Balance
+
+	updatedUser, err := u.userRepo.UpdateUser(user)
+	if err != nil {
+		return nil, err
+	}
+
+	message := fmt.Sprintf("Your balance has been successfully updated to Rp %d", updatedUser.Balance)
+	response := &dto.TopupBalanceResponse{
+		Message: message,
 	}
 
 	return response, nil

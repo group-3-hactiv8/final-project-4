@@ -36,11 +36,13 @@ type NewUserResponse struct {
 	ID        uint      `json:"id"`
 	FullName  string    `json:"full_name"`
 	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	Balance   uint      `json:"balance"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
 type LoginUserRequest struct {
-	Email    string `json:"email" valid:"required~Your Email is required"`
+	Email    string `json:"email" valid:"required~Your Email is required, email~Invalid email format"`
 	Password string `json:"password" valid:"required~Your password is required"`
 }
 
@@ -65,35 +67,43 @@ type LoginUserResponse struct {
 	Token string `json:"token"`
 }
 
-type UpdateUserRequest struct {
-	FullName string `json:"full_name" valid:"required~Your Full Name is required"`
-	Email    string `json:"email" valid:"required~Your email is required, email~Invalid email format"`
+type TopupBalanceRequest struct {
+	Balance uint `json:"balance"`
 }
 
-func (u *UpdateUserRequest) ValidateStruct() errs.MessageErr {
+func (u *TopupBalanceRequest) ValidateStruct() errs.MessageErr {
 	_, err := govalidator.ValidateStruct(u)
 
 	if err != nil {
 		return errs.NewBadRequest(err.Error())
 	}
 
+	isUnderOrEqualToMillion := govalidator.InRangeInt(u.Balance, 0, 100000000) // kalau 0 tetep true (lower bound)
+
+	if !isUnderOrEqualToMillion {
+		return errs.NewUnprocessableEntity("Balance must have non-negative value and less than-or-equal to 100.000.000")
+	}
+
 	return nil
 }
 
-func (u *UpdateUserRequest) UpdateUserRequestToModel() *models.User {
+func (u *TopupBalanceRequest) TopupBalanceRequestToModel() *models.User {
 	return &models.User{
-		FullName: u.FullName,
-		Email:    u.Email,
+		Balance: u.Balance,
 	}
 }
 
-type UpdateUserResponse struct {
-	ID        uint      `json:"id"`
-	FullName  string    `json:"full_name"`
-	Email     string    `json:"email"`
-	UpdatedAt time.Time `json:"updated_at"`
+type TopupBalanceResponse struct {
+	Message string `json:"message"`
 }
 
-type DeleteUserResponse struct {
-	Message string `json:"message"`
+
+
+type UserData struct {
+	ID        uint      `json:"id"`
+	Email     string    `json:"email"`
+	FullName  string    `json:"full_name"`
+	Balance   uint      `json:"balance"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

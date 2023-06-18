@@ -37,7 +37,7 @@ func (u *userPG) SeedingAdmin() {
 			log.Println(message)
 		}
 	} else { // baru buat admin pertama kali
-		log.Println("\nAdmin has been created successfully\n")
+		log.Println("\nAdmin has been created successfully\n ")
 	}
 
 }
@@ -65,21 +65,20 @@ func (u *userPG) GetUserByEmail(user *models.User) errs.MessageErr {
 
 	return nil
 }
-func (u *userPG) GetUserByID(user *models.User) errs.MessageErr {
-	err := u.db.Where("id = ?", user.ID).Take(&user).Error
-	// Karna di Take, objek user akan terupdate, termasuk passwordnya.
-	// Makannya kita simpen dulu password dari request nya di service level.
+func (u *userPG) GetUserByID(userID uint) (*models.User, errs.MessageErr) {
+	user := &models.User{}
+	err := u.db.Where("id = ?", userID).Take(user).Error
 
 	if err != nil {
-		message := fmt.Sprintf("User with ID %v not found", user.ID)
-		err2 := errs.NewNotFound(message)
-		return err2
+		message := fmt.Sprintf("User with ID %v not found", userID)
+		err := errs.NewNotFound(message)
+		return nil, err
 	}
 
-	return nil
+	return user, nil
 }
 
-func (u *userPG) UpdateBalance(user *models.User) (*models.User, errs.MessageErr) {
+func (u *userPG) UpdateUser(user *models.User) (*models.User, errs.MessageErr) {
 	err := u.db.Model(user).Updates(user).Error
 
 	if err != nil {
