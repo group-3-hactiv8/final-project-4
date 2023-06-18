@@ -45,17 +45,16 @@ func (th *transactionHistoryService) CreateTransaction(payload *dto.NewTransacti
 	product := &models.Product{}
 	product.ID = uint(payload.ProductId) // Mengubah nilai ProductId menjadi uint
 
-	_, err := th.productRepo.GetProductByID(uint(product.ID))
+	product, err := th.productRepo.GetProductByID(uint(product.ID))
 	if err != nil {
-    	return nil, err
+		return nil, err
 	}
 
 	// check if product's stock is more than the quantity
 	if product.Stock < newTransaction.Quantity {
-    err := errs.NewBadRequest("Not enough product's stock")
-    	return nil, err
+		err := errs.NewBadRequest("Not enough product's stock")
+		return nil, err
 	}
-
 
 	// calculate total price
 	totalPrice := newTransaction.Quantity * product.Price
@@ -64,8 +63,8 @@ func (th *transactionHistoryService) CreateTransaction(payload *dto.NewTransacti
 	// check if user's balance is more than the total price
 	user := &models.User{}
 	user.ID = user_id
-	
-	_, err = th.userRepo.GetUserByID(uint(user.ID))
+
+	user, err = th.userRepo.GetUserByID(uint(user.ID))
 	if err != nil {
 		return nil, err
 	}
@@ -119,8 +118,7 @@ func (th *transactionHistoryService) CreateTransaction(payload *dto.NewTransacti
 	return response, nil
 }
 
-
-func (th *transactionHistoryService) GetTransactionsByUserID( user_id uint) ([]dto.GetTransactionsByUserIDResponse, errs.MessageErr) {
+func (th *transactionHistoryService) GetTransactionsByUserID(user_id uint) ([]dto.GetTransactionsByUserIDResponse, errs.MessageErr) {
 	transactions, err := th.transactionHistoryRepo.GetTransactionsByUserID(user_id)
 	if err != nil {
 		return nil, err
@@ -154,7 +152,6 @@ func (th *transactionHistoryService) GetTransactionsByUserID( user_id uint) ([]d
 	return response, nil
 }
 
-
 // func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransactionsResponse, errs.MessageErr) {
 // 	transactions, err := th.transactionHistoryRepo.GetUserTransactions()
 // 	if err != nil {
@@ -167,7 +164,7 @@ func (th *transactionHistoryService) GetTransactionsByUserID( user_id uint) ([]d
 // 		if err != nil {
 // 			return nil, err
 // 		}
-	
+
 // 		user, err := th.userRepo.GetUserByID(transaction.UserId)
 // 		if err != nil {
 // 			return nil, err
@@ -202,8 +199,6 @@ func (th *transactionHistoryService) GetTransactionsByUserID( user_id uint) ([]d
 // 	return response, nil
 // }
 
-
-
 func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransactionsResponse, errs.MessageErr) {
 	transactions, err := th.transactionHistoryRepo.GetUserTransactions()
 	if err != nil {
@@ -216,12 +211,12 @@ func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransac
 		if err != nil {
 			return nil, err
 		}
-	
+
 		_, errGetUser := th.userRepo.GetUserByID(transaction.UserId)
 		if errGetUser != nil {
 			return nil, errGetUser
 		}
-	
+
 		response = append(response, dto.GetUserTransactionsResponse{
 			ID:         transaction.ID,
 			ProductID:  transaction.ProductId,
@@ -247,6 +242,6 @@ func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransac
 			},
 		})
 	}
-	
+
 	return response, nil
 }
