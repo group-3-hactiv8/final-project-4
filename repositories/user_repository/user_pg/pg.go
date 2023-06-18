@@ -20,8 +20,8 @@ func NewUserPG(db *gorm.DB) user_repository.UserRepository {
 
 func (u *userPG) SeedingAdmin() {
 	newAdmin := &models.User{
-		FullName: "adminx",
-		Email:    "adminx@gmail.com",
+		FullName: "admin",
+		Email:    "admin@gmail.com",
 		Password: "123456",
 		Role:     "admin",
 	}
@@ -88,4 +88,3 @@ func (u *userPG) UpdateUser(user *models.User) (*models.User, errs.MessageErr) {
 
 	return user, nil
 }
-
