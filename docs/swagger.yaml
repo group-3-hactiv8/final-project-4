@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   dto.AllProductsResponse:
     properties:
@@ -268,8 +269,14 @@ definitions:
         example: 400
         type: integer
     type: object
+host: localhost:8080
 info:
-  contact: {}
+  contact:
+    name: Swagger API Team
+  description: This is a server for Toko Belanja.
+  termsOfService: http://swagger.io/terms/
+  title: Toko Belanja API
+  version: "1.0"
 paths:
   /category:
     get:
