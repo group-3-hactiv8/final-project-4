@@ -25,6 +25,3 @@ func (th *TransactionHistory) BeforeCreate(tx *gorm.DB) error {
 	}
 	return nil
 }
-
-
-
