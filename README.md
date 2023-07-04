@@ -1,28 +1,32 @@
 # final-project-4
 Toko Belanja
 
+## Admin Credentials
+- email: admin@gmail.com
+- password: 123456
+
 ## Endpoints
 Users
-1. POST - http://localhost:8080/users/register - Register a user
-2. POST - http://localhost:8080/users/login - Login
-3. PATCH - http://localhost:8080/users/topup - Topup the balance of a user
+1. POST - https://final-project-4-production.up.railway.app/users/register - Register a user
+2. POST - https://final-project-4-production.up.railway.app/users/login - Login
+3. PATCH - https://final-project-4-production.up.railway.app/users/topup - Topup the balance of a user
 
 Categories
-1. POST - http://localhost:8080/categories - Create a category
-2. GET - http://localhost:8080/categories - Get all categories
-3. PATCH - http://localhost:8080/categories/{categoryId} - Update a category's type
-4. DELETE - http://localhost:8080/categories/{categoryId} - Delete a category
+1. POST - https://final-project-4-production.up.railway.app/category - Create a category
+2. GET - https://final-project-4-production.up.railway.app/category - Get all categories
+3. PATCH - https://final-project-4-production.up.railway.app/category/{categoryId} - Update a category's type
+4. DELETE - https://final-project-4-production.up.railway.app/category/{categoryId} - Delete a category
 
 Products
-1. POST - http://localhost:8080/products - Create a product
-2. GET - http://localhost:8080/products - Get all products
-3. PUT - http://localhost:8080/products/{productId} - Update a product
-4. DELETE - http://localhost:8080/products/{productId} - Delete a product
+1. POST - https://final-project-4-production.up.railway.app/products - Create a product
+2. GET - https://final-project-4-production.up.railway.app/products - Get all products
+3. PUT - https://final-project-4-production.up.railway.app/products/{productId} - Update a product
+4. DELETE - https://final-project-4-production.up.railway.app/products/{productId} - Delete a product
 
 TransactionHistories
-1. POST - http://localhost:8080/transactions - Create a transaction
-2. GET - http://localhost:8080/transactions/my-transactions - Get all transactions from the current logged in user
-3. GET - http://localhost:8080/transactions/user-transactions - Get all transactions from all users
+1. POST - https://final-project-4-production.up.railway.app/transactions - Create a transaction
+2. GET - https://final-project-4-production.up.railway.app/transactions/my-transactions - Get all transactions from the current logged in user
+3. GET - https://final-project-4-production.up.railway.app/transactions/user-transactions - Get all transactions from all users
 
 ## Group 3
 1. Prinata Rakha Santoso - GLNG-KS06-005
