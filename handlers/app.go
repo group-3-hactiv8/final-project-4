@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"final-project-4/database"
-	_ "final-project-4/docs"
+	// _ "final-project-4/docs"
 	"final-project-4/handlers/http_handlers"
 	"final-project-4/middlewares"
 	"final-project-4/repositories/category_repository/category_pg"
@@ -10,6 +10,8 @@ import (
 	"final-project-4/repositories/transaction_history_repository/transaction_history_pg"
 	"final-project-4/repositories/user_repository/user_pg"
 	"final-project-4/services"
+	"final-project-4/docs"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,14 +19,9 @@ import (
 	swaggerfiles "github.com/swaggo/files"
 )
 
-// @title Toko Belanja API
-// @version 1.0
-// @description This is a server for Toko Belanja.
-// @termsOfService http://swagger.io/terms/
-// @contact.name Swagger API Team
-// @host final-project-4-production.up.railway.app
-// @BasePath /
-func StartApp() *gin.Engine {
+// const port = ":8080"
+
+func StartApp() {
 	database.StartDB()
 	db := database.GetPostgresInstance()
 
@@ -91,8 +88,18 @@ func StartApp() *gin.Engine {
 
 	}
 
+	docs.SwaggerInfo.Title = "API Toko Belanja"
+	docs.SwaggerInfo.Description = "Ini adalah server API Toko Belanja."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "final-project-4-production.up.railway.app"
+	docs.SwaggerInfo.Schemes = []string{"https", "http"}
+	// docs.SwaggerInfo.Host = "localhost:8080"
+	// docs.SwaggerInfo.Schemes = []string{"http"}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	return router
+	router.Run(":" + os.Getenv("PORT"))
+
+	// router.Run(port)
 
 }

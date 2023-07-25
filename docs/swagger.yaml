@@ -274,6 +274,13 @@ paths:
   /category:
     get:
       description: Get all category by json
+      parameters:
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -303,6 +310,12 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.NewCategoryRequest'
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -326,6 +339,38 @@ paths:
       tags:
       - category
   /category/{categoryId}:
+    delete:
+      description: Delete a Category by param
+      parameters:
+      - description: Category ID request
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Delete a Category
+      tags:
+      - category
     patch:
       consumes:
       - application/json
@@ -342,6 +387,12 @@ paths:
         name: categoryId
         required: true
         type: integer
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -368,36 +419,16 @@ paths:
       summary: Update a category
       tags:
       - category
-  /category/{id}:
-    delete:
-      description: Delete a Category by param
-      parameters:
-      - description: Category ID request
-        in: path
-        name: categoryId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.DeleteCategoryResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/errs.MessageErrData'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/errs.MessageErrData'
-      summary: Delete a Category
-      tags:
-      - category
   /my-transactions:
     get:
       description: Get user transaction by json
+      parameters:
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -419,6 +450,13 @@ paths:
   /products:
     get:
       description: Get all products by json
+      parameters:
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -448,6 +486,12 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.NewProductRequest'
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -466,7 +510,7 @@ paths:
       summary: Create a product
       tags:
       - products
-  /products/{id}:
+  /products/{productId}:
     delete:
       description: Delete a Product by param
       parameters:
@@ -475,6 +519,12 @@ paths:
         name: productId
         required: true
         type: integer
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -493,7 +543,6 @@ paths:
       summary: Delete a Product
       tags:
       - products
-  /products/{productId}:
     put:
       consumes:
       - application/json
@@ -510,6 +559,12 @@ paths:
         name: productId
         required: true
         type: integer
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -548,6 +603,12 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.NewTransactionRequest'
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -569,6 +630,13 @@ paths:
   /user-transactions:
     get:
       description: Get user transaction by json
+      parameters:
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -659,6 +727,12 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.TopupBalanceRequest'
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:

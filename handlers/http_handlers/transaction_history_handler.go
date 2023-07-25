@@ -28,6 +28,7 @@ func NewTransactionHistoryHandler(transactionHistoryService services.Transaction
 //	@Produce		json
 //	@Param			user	body		dto.NewTransactionRequest	true	"Create Transaction request body"
 //	@Success		201		{object}	dto.NewTransactionResponse
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
 //	@Failure		422		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
 //	@Router			/transactions [post]
@@ -67,7 +68,8 @@ func (th *transactionHistoryHandler) CreateTransaction(ctx *gin.Context) {
 //	@Description	Get user transaction by json
 //	@Tags			transactions
 //	@Produce		json
-//	@Success		200		{object}	dto.GetTransactionsByUserIDResponse 
+//	@Success		200		{object}	dto.GetTransactionsByUserIDResponse
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>) 
 //	@Failure		401		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
 //	@Router			/my-transactions [get]
@@ -95,6 +97,7 @@ func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
 //	@Tags			transactions
 //	@Produce		json
 //	@Success		200		{object}	dto.GetUserTransactions
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
 //	@Failure		401		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
 //	@Router			/user-transactions [get]
