@@ -419,34 +419,6 @@ paths:
       summary: Update a category
       tags:
       - category
-  /my-transactions:
-    get:
-      description: Get user transaction by json
-      parameters:
-      - default: Bearer <Add your access token here>
-        description: Insert your access token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.GetTransactionsByUserIDResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/errs.MessageErrData'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/errs.MessageErrData'
-      summary: Get user transaction
-      tags:
-      - transactions
   /products:
     get:
       description: Get all products by json
@@ -627,9 +599,37 @@ paths:
       summary: Create a Transaction
       tags:
       - transactions
-  /user-transactions:
+  /transactions/my-transactions:
     get:
-      description: Get user transaction by json
+      description: Get current logged in user transactions by json
+      parameters:
+      - default: Bearer <Add your access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetTransactionsByUserIDResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.MessageErrData'
+      summary: Get current logged in user transactions
+      tags:
+      - transactions
+  /transactions/user-transactions:
+    get:
+      description: Get all users transactions by json
       parameters:
       - default: Bearer <Add your access token here>
         description: Insert your access token
@@ -652,7 +652,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/errs.MessageErrData'
-      summary: Get user transaction
+      summary: Get all users transactions
       tags:
       - transactions
   /users/login:
