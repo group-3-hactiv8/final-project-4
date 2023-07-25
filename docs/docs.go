@@ -26,6 +26,16 @@ const docTemplate = `{
                     "category"
                 ],
                 "summary": "Get all category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -68,6 +78,14 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.NewCategoryRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -99,6 +117,53 @@ const docTemplate = `{
             }
         },
         "/category/{categoryId}": {
+            "delete": {
+                "description": "Delete a Category by param",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Delete a Category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID request",
+                        "name": "categoryId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeleteCategoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Update a category",
                 "consumes": [
@@ -126,6 +191,14 @@ const docTemplate = `{
                         "description": "category ID request",
                         "name": "categoryId",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -163,79 +236,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/category/{id}": {
-            "delete": {
-                "description": "Delete a Category by param",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "category"
-                ],
-                "summary": "Delete a Category",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Category ID request",
-                        "name": "categoryId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.DeleteCategoryResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    }
-                }
-            }
-        },
-        "/my-transactions": {
-            "get": {
-                "description": "Get user transaction by json",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "transactions"
-                ],
-                "summary": "Get user transaction",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.GetTransactionsByUserIDResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    }
-                }
-            }
-        },
         "/products": {
             "get": {
                 "description": "Get all products by json",
@@ -246,6 +246,16 @@ const docTemplate = `{
                     "products"
                 ],
                 "summary": "Get all products",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -288,6 +298,14 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.NewProductRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -305,47 +323,6 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    }
-                }
-            }
-        },
-        "/products/{id}": {
-            "delete": {
-                "description": "Delete a Product by param",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "products"
-                ],
-                "summary": "Delete a Product",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "product ID request",
-                        "name": "productId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.DeleteProductResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errs.MessageErrData"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/errs.MessageErrData"
                         }
@@ -382,6 +359,14 @@ const docTemplate = `{
                         "name": "productId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -416,6 +401,53 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete a Product by param",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Delete a Product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "product ID request",
+                        "name": "productId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeleteProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    }
+                }
             }
         },
         "/transactions": {
@@ -440,6 +472,14 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.NewTransactionRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -464,16 +504,68 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-transactions": {
+        "/transactions/my-transactions": {
             "get": {
-                "description": "Get user transaction by json",
+                "description": "Get current logged in user transactions by json",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "transactions"
                 ],
-                "summary": "Get user transaction",
+                "summary": "Get current logged in user transactions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetTransactionsByUserIDResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errs.MessageErrData"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/user-transactions": {
+            "get": {
+                "description": "Get all users transactions by json",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Get all users transactions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -610,6 +702,14 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.TopupBalanceRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd your access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1070,8 +1170,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
 }
 
 func init() {

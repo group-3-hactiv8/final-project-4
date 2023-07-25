@@ -27,6 +27,7 @@ func NewProductHandler(productService services.ProductService) *productHandler {
 //	@Produce		json
 //	@Param			user	body		dto.NewProductRequest	true	"Create product request body"
 //	@Success		201		{object}	dto.NewProductResponse
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
 //	@Failure		422		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
 //	@Router			/products [post]
@@ -61,6 +62,7 @@ func (p *productHandler) CreateProduct(ctx *gin.Context) {
 //	@Tags			products
 //	@Produce		json
 //	@Success		200		{object}	dto.AllProductsResponse
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
 //	@Failure		401		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
 //	@Router			/products [get]
@@ -86,6 +88,7 @@ func (p *productHandler) GetAllProducts(ctx *gin.Context) {
 //	@Param			products		body		dto.NewProductRequest	true	"Update Product request body"
 //	@Param			productId	path		uint						true	"Product ID request"
 //	@Success		200			{object}	dto.UpdateProductResponse
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
 //	@Failure		401			{object}	errs.MessageErrData
 //	@Failure		400			{object}	errs.MessageErrData
 //	@Failure		422			{object}	errs.MessageErrData
@@ -133,9 +136,10 @@ func (p *productHandler) UpdateProducts(ctx *gin.Context) {
 //	@Produce		json
 //	@Param			productId	 path		uint						true	"product ID request"
 //	@Success		200			{object}	dto.DeleteProductResponse
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
 //	@Failure		401			{object}	errs.MessageErrData
 //	@Failure		400			{object}	errs.MessageErrData
-//	@Router			/products/{id} [delete]
+//	@Router			/products/{productId} [delete]
 func (p *productHandler) DeleteProduct(ctx *gin.Context) {
 	productId := ctx.Param("productId")
 	productIdUint, err := strconv.ParseUint(productId, 10, 16)

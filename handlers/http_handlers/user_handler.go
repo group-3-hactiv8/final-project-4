@@ -99,6 +99,7 @@ func (u *userHandler) LoginUser(ctx *gin.Context) {
 //	@Produce		json
 //	@Param			user	body		dto.TopupBalanceRequest	true	"Add more balance of a user request body"
 //	@Success		200		{object}	dto.TopupBalanceResponse
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
 //	@Failure		401		{object}	errs.MessageErrData
 //	@Failure		422		{object}	errs.MessageErrData
 //	@Failure		400		{object}	errs.MessageErrData
