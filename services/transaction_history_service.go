@@ -152,53 +152,6 @@ func (th *transactionHistoryService) GetTransactionsByUserID(user_id uint) ([]dt
 	return response, nil
 }
 
-// func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransactionsResponse, errs.MessageErr) {
-// 	transactions, err := th.transactionHistoryRepo.GetUserTransactions()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	response := []dto.GetUserTransactionsResponse{}
-// 	for _, transaction := range transactions {
-// 		product, err := th.productRepo.GetProductByIdUpdate(transaction.ProductId)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-
-// 		user, err := th.userRepo.GetUserByID(transaction.UserId)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-
-// 		response = append(response, dto.GetUserTransactionsResponse{
-// 			ID:         transaction.ID,
-// 			ProductID:  transaction.ProductId,
-// 			UserID:     transaction.UserId,
-// 			Quantity:   transaction.Quantity,
-// 			TotalPrice: transaction.TotalPrice,
-// 			Product: dto.ProductDataWithCategoryIDAndIntegerPrice{
-// 				ID:         product.ID,
-// 				Title:      product.Title,
-// 				Price:      product.Price,
-// 				Stock:      product.Stock,
-// 				CategoryID: product.CategoryId,
-// 				CreatedAt:  product.CreatedAt,
-// 				UpdatedAt:  product.UpdatedAt,
-// 			},
-// 			User: dto.UserData{
-// 				ID:        user.ID,
-// 				Email:     user.Email,
-// 				FullName:  user.FullName,
-// 				Balance:   user.Balance,
-// 				CreatedAt: user.CreatedAt,
-// 				UpdatedAt: user.UpdatedAt,
-// 			},
-// 		})
-// 	}
-
-// 	return response, nil
-// }
-
 func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransactionsResponse, errs.MessageErr) {
 	transactions, err := th.transactionHistoryRepo.GetUserTransactions()
 	if err != nil {
@@ -212,7 +165,7 @@ func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransac
 			return nil, err
 		}
 
-		_, errGetUser := th.userRepo.GetUserByID(transaction.UserId)
+		user, errGetUser := th.userRepo.GetUserByID(transaction.UserId)
 		if errGetUser != nil {
 			return nil, errGetUser
 		}
@@ -233,12 +186,12 @@ func (th *transactionHistoryService) GetUserTransactions() ([]dto.GetUserTransac
 				UpdatedAt:  product.UpdatedAt,
 			},
 			User: dto.UserData{
-				ID:        transaction.User.ID,
-				Email:     transaction.User.Email,
-				FullName:  transaction.User.FullName,
-				Balance:   transaction.User.Balance,
-				CreatedAt: transaction.User.CreatedAt,
-				UpdatedAt: transaction.User.UpdatedAt,
+				ID:        user.ID,
+				Email:     user.Email,
+				FullName:  user.FullName,
+				Balance:   user.Balance,
+				CreatedAt: user.CreatedAt,
+				UpdatedAt: user.UpdatedAt,
 			},
 		})
 	}

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"final-project-4/database"
-	// _ "final-project-4/docs"
+	"final-project-4/docs"
 	"final-project-4/handlers/http_handlers"
 	"final-project-4/middlewares"
 	"final-project-4/repositories/category_repository/category_pg"
@@ -10,7 +10,7 @@ import (
 	"final-project-4/repositories/transaction_history_repository/transaction_history_pg"
 	"final-project-4/repositories/user_repository/user_pg"
 	"final-project-4/services"
-	"final-project-4/docs"
+
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -27,9 +27,9 @@ func StartApp() {
 
 	router := gin.Default()
 
-	router.GET("/health-check-fp4", func (c *gin.Context){
+	router.GET("/health-check-fp4", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"appName" : "TokoBelanja",
+			"appName": "TokoBelanja",
 		})
 	})
 
@@ -56,10 +56,10 @@ func StartApp() {
 
 	categoryRouter.Use(middlewares.Authentication())
 	{
-		categoryRouter.POST("/", middlewares.CategoryAuthorization(), categoryHandler.CreateCategory)
-		categoryRouter.PATCH("/:categoryId", middlewares.CategoryAuthorization(), categoryHandler.UpdateCategory)
-		categoryRouter.GET("/", middlewares.CategoryAuthorization(), categoryHandler.GetAllCategory)
-		categoryRouter.DELETE("/:categoryId", middlewares.CategoryAuthorization(), categoryHandler.DeleteCategory)
+		categoryRouter.POST("/", middlewares.AdminAuthorization(), categoryHandler.CreateCategory)
+		categoryRouter.PATCH("/:categoryId", middlewares.AdminAuthorization(), categoryHandler.UpdateCategory)
+		categoryRouter.GET("/", middlewares.AdminAuthorization(), categoryHandler.GetAllCategory)
+		categoryRouter.DELETE("/:categoryId", middlewares.AdminAuthorization(), categoryHandler.DeleteCategory)
 	}
 
 	productRepo := product_pg.NewProductPG(db)
@@ -69,10 +69,10 @@ func StartApp() {
 	productsRouter := router.Group("/products")
 	productsRouter.Use(middlewares.Authentication())
 	{
-		productsRouter.POST("/", middlewares.ProductAuthorization(), productHandler.CreateProduct)
+		productsRouter.POST("/", middlewares.AdminAuthorization(), productHandler.CreateProduct)
 		productsRouter.GET("/", productHandler.GetAllProducts) // fitur ini emg ga dicek admin atau bukan, jd gapake authorization
-		productsRouter.PUT("/:productId", middlewares.ProductAuthorization(), productHandler.UpdateProducts)
-		productsRouter.DELETE("/:productId", middlewares.ProductAuthorization(), productHandler.DeleteProduct)
+		productsRouter.PUT("/:productId", middlewares.AdminAuthorization(), productHandler.UpdateProducts)
+		productsRouter.DELETE("/:productId", middlewares.AdminAuthorization(), productHandler.DeleteProduct)
 	}
 
 	transactionHistoryRepo := transaction_history_pg.NewTransactionHistoryPG(db, productRepo, userRepo, categoryRepo)
@@ -83,8 +83,8 @@ func StartApp() {
 	transactionHistoryRouter.Use(middlewares.Authentication())
 	{
 		transactionHistoryRouter.POST("/", transactionHistoryHandler.CreateTransaction)
-		transactionHistoryRouter.GET("/my-transactions", middlewares.TaskAuthorization(), transactionHistoryHandler.GetTransactionsByUserID)
-		transactionHistoryRouter.GET("/user-transactions", middlewares.TaskAuthorization(), middlewares.Authentication(), transactionHistoryHandler.GetTransactionsByUserID)
+		transactionHistoryRouter.GET("/my-transactions", transactionHistoryHandler.GetTransactionsByUserID)
+		transactionHistoryRouter.GET("/user-transactions", middlewares.AdminAuthorization(), middlewares.Authentication(), transactionHistoryHandler.GetUserTransactions)
 
 	}
 

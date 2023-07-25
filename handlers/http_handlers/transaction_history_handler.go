@@ -2,7 +2,6 @@ package http_handlers
 
 import (
 	"final-project-4/dto"
-	"final-project-4/models"
 	"final-project-4/pkg/errs"
 	"final-project-4/services"
 	"net/http"
@@ -66,8 +65,8 @@ func (th *transactionHistoryHandler) CreateTransaction(ctx *gin.Context) {
 
 // GetTransactionsByUserID godoc
 //
-//	@Summary		Get user transaction
-//	@Description	Get user transaction by json
+//	@Summary		Get current logged in user transactions
+//	@Description	Get current logged in user transactions by json
 //	@Tags			transactions
 //	@Produce		json
 //	@Success		200		{object}	dto.GetTransactionsByUserIDResponse
@@ -78,14 +77,10 @@ func (th *transactionHistoryHandler) CreateTransaction(ctx *gin.Context) {
 //	@Failure		500		{object}	errs.MessageErrData
 //	@Router			/transactions/my-transactions [get]
 func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
-	userData, ok := ctx.MustGet("userData").(*models.User)
-	if !ok {
-		newError := errs.NewBadRequest("Failed to get user data")
-		ctx.JSON(newError.StatusCode(), newError)
-		return
-	}
+	userData := ctx.MustGet("userData").(jwt.MapClaims)
+	userId := uint(userData["id"].(float64))
 
-	transactions, err := th.transactionHistoryService.GetTransactionsByUserID(userData.ID)
+	transactions, err := th.transactionHistoryService.GetTransactionsByUserID(userId)
 	if err != nil {
 		ctx.JSON(err.StatusCode(), err)
 		return
@@ -96,8 +91,8 @@ func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
 
 // GetUserTransactions godoc
 //
-//	@Summary		Get user transaction
-//	@Description	Get user transaction by json
+//	@Summary		Get all users transactions
+//	@Description	Get all users transactions by json
 //	@Tags			transactions
 //	@Produce		json
 //	@Success		200		{object}	dto.GetUserTransactions
