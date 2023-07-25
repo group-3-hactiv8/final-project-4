@@ -28,7 +28,9 @@ func NewTransactionHistoryHandler(transactionHistoryService services.Transaction
 //	@Produce		json
 //	@Param			user	body		dto.NewTransactionRequest	true	"Create Transaction request body"
 //	@Success		201		{object}	dto.NewTransactionResponse
+//
 // @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
+//
 //	@Failure		422		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
 //	@Router			/transactions [post]
@@ -69,10 +71,12 @@ func (th *transactionHistoryHandler) CreateTransaction(ctx *gin.Context) {
 //	@Tags			transactions
 //	@Produce		json
 //	@Success		200		{object}	dto.GetTransactionsByUserIDResponse
-// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>) 
+//
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
+//
 //	@Failure		401		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
-//	@Router			/my-transactions [get]
+//	@Router			/transactions/my-transactions [get]
 func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
 	userData, ok := ctx.MustGet("userData").(*models.User)
 	if !ok {
@@ -81,7 +85,7 @@ func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
 		return
 	}
 
-	transactions, err :=  th.transactionHistoryService.GetTransactionsByUserID(userData.ID)
+	transactions, err := th.transactionHistoryService.GetTransactionsByUserID(userData.ID)
 	if err != nil {
 		ctx.JSON(err.StatusCode(), err)
 		return
@@ -97,16 +101,17 @@ func (th *transactionHistoryHandler) GetTransactionsByUserID(ctx *gin.Context) {
 //	@Tags			transactions
 //	@Produce		json
 //	@Success		200		{object}	dto.GetUserTransactions
+//
 // @Param Authorization header string true "Insert your access token" default(Bearer <Add your access token here>)
+//
 //	@Failure		401		{object}	errs.MessageErrData
 //	@Failure		500		{object}	errs.MessageErrData
-//	@Router			/user-transactions [get]
+//	@Router			/transactions/user-transactions [get]
 func (th *transactionHistoryHandler) GetUserTransactions(ctx *gin.Context) {
 	transactions, err := th.transactionHistoryService.GetUserTransactions()
 	if err != nil {
-		ctx.JSON(err.StatusCode(),err)
+		ctx.JSON(err.StatusCode(), err)
 		return
 	}
 	ctx.JSON(http.StatusOK, transactions)
 }
-
